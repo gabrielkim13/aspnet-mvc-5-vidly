@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 using Vidly.DAL;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -41,6 +42,54 @@ namespace Vidly.Controllers
                 return HttpNotFound();
 
             return View(customer);
+        }
+
+        public ActionResult New()
+        {
+            var customerFormViewModel = new CustomerFormViewModel()
+            {
+                MembershipTypes = _context.MembershipTypes.ToList(),
+            };
+
+            return View("CustomerForm", customerFormViewModel);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(x => x.Id == id);
+
+            if (customer == null)
+                return HttpNotFound();
+
+            var customerFormViewModel = new CustomerFormViewModel()
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipTypes.ToList(),
+            };
+
+            return View("CustomerForm", customerFormViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Customer customer)
+        {
+            if (customer.Id > 0)
+            {
+                var updateCustomer = _context.Customers.Single(c => c.Id == customer.Id);
+
+                updateCustomer.Name = customer.Name;
+                updateCustomer.BirthDate = customer.BirthDate;
+                updateCustomer.MembershipTypeId = customer.MembershipTypeId;
+                updateCustomer.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+            }
+            else
+            {
+                _context.Customers.Add(customer);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
