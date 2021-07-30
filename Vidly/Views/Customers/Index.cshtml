@@ -15,6 +15,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">Customer</th>
+                <th scope="col">Membership Type</th>
             </tr>
         </thead>
 
@@ -23,6 +24,7 @@
             {
                 <tr>
                     <td>@Html.ActionLink(customer.Name, "Details", "Customers", new { id = customer.Id }, null)</td>
+                    <td>@customer.MembershipType.Name</td>
                 </tr>
             }
         </tbody>

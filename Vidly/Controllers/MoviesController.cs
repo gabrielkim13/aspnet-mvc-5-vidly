@@ -1,56 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using Vidly.DAL;
 using Vidly.Models;
-using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
     public class MoviesController : Controller
     {
-        private List<Movie> Movies = new List<Movie>
+        private VidlyContext _context;
+
+        public MoviesController()
         {
-            new Movie() { Id = 1, Name = "Shrek" },
-            new Movie() { Id = 2, Name = "Wall-e" },
-        };
+            _context = new VidlyContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+
+            base.Dispose(disposing);
+        }
 
         public ActionResult Index()
         {
-            return View(Movies);
+            var movies = _context.Movies.Include(m => m.Genre).ToList();
+
+            return View(movies);
         }
 
-        public ActionResult Random()
+        public ActionResult Details(int id)
         {
-            var random = new Random();
-            var randomIndex = random.Next(0, Movies.Count);
-            
-            var movie = Movies[randomIndex];
-            var customers = new List<Customer>
-            {
-                new Customer { Name = "Alice" },
-                new Customer { Name = "Bob" },
-                new Customer { Name = "Carol" },
-            };
+            var movie= _context.Movies.Include(c => c.Genre).SingleOrDefault(x => x.Id == id);
 
-            var randomMovieViewModel = new RandomMovieViewModel
-            {
-                Movie = movie,
-                Customers = customers
-            };
+            if (movie == null)
+                return HttpNotFound();
 
-            //ViewData["Movie"] = movie;
-            //ViewBag.Movie = movie;
-
-            return View(randomMovieViewModel);
+            return View(movie);
         }
 
-        [Route("movies/released/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1, 12)}")]
-        public ActionResult ByReleaseDate(int year, int month)
-        {
-            return Content(string.Format("Release date: {0}/{1}", month, year));
-        }
+        //public ActionResult Random()
+        //{
+        //    var random = new Random();
+        //    var randomIndex = random.Next(0, Movies.Count);
+
+        //    var movie = Movies[randomIndex];
+        //    var customers = new List<Customer>
+        //    {
+        //        new Customer { Name = "Alice" },
+        //        new Customer { Name = "Bob" },
+        //        new Customer { Name = "Carol" },
+        //    };
+
+        //    var randomMovieViewModel = new RandomMovieViewModel
+        //    {
+        //        Movie = movie,
+        //        Customers = customers
+        //    };
+
+        //    //ViewData["Movie"] = movie;
+        //    //ViewBag.Movie = movie;
+
+        //    return View(randomMovieViewModel);
+        //}
+
+        //[Route("movies/released/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1, 12)}")]
+        //public ActionResult ByReleaseDate(int year, int month)
+        //{
+        //    return Content(string.Format("Release date: {0}/{1}", month, year));
+        //}
     }
 }
