@@ -13,7 +13,7 @@ namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
-        private VidlyContext _context;
+        private readonly VidlyContext _context;
 
         public CustomersController()
         {
