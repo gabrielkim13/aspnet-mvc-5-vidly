@@ -218,9 +218,14 @@
     <Compile Include="Migrations\202107301732076_AddMovieAndGenre.designer.cs">
       <DependentUpon>202107301732076_AddMovieAndGenre.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107302027139_AddValidationAttributes.cs" />
+    <Compile Include="Migrations\202107302027139_AddValidationAttributes.designer.cs">
+      <DependentUpon>202107302027139_AddValidationAttributes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\AppRole.cs" />
+    <Compile Include="Models\Min18YearsIfAMember.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -315,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107301732076_AddMovieAndGenre.resx">
       <DependentUpon>202107301732076_AddMovieAndGenre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107302027139_AddValidationAttributes.resx">
+      <DependentUpon>202107302027139_AddValidationAttributes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
