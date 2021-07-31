@@ -26,5 +26,7 @@ namespace Vidly.Dtos
         public int NumberInStock { get; set; }
 
         public DateTime DateAdded { get; set; }
+
+        public GenreDto Genre { get; set; }
     }
 }
