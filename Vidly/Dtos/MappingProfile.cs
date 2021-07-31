@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using Vidly.Dtos;
 using Vidly.Models;
 
-namespace Vidly.App_Start
+namespace Vidly.Dtos
 {
     public class MappingProfile : Profile
     {

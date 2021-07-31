@@ -5,19 +5,17 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-using Vidly.DAL;
 using Vidly.Models;
-using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly VidlyContext _context;
+        private readonly ApplicationDbContext _context;
 
         public CustomersController()
         {
-            _context = new VidlyContext();
+            _context = new ApplicationDbContext();
         }
 
         protected override void Dispose(bool disposing)

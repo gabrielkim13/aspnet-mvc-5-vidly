@@ -6,7 +6,7 @@
     using System.Data.SQLite.EF6.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Vidly.DAL.VidlyContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Vidly.Models.ApplicationDbContext>
     {
         public Configuration()
         {
@@ -14,7 +14,7 @@
             SetSqlGenerator("System.Data.SQLite", new SQLiteMigrationSqlGenerator());
         }
 
-        protected override void Seed(Vidly.DAL.VidlyContext context)
+        protected override void Seed(Vidly.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

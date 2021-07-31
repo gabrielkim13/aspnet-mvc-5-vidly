@@ -7,8 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-using Vidly.App_Start;
-using Vidly.DAL;
 using Vidly.Dtos;
 using Vidly.Models;
 
@@ -18,7 +16,7 @@ namespace Vidly.Controllers.Api
     {
         private readonly IMapper _mapper;
 
-        private VidlyContext _context;
+        private ApplicationDbContext _context;
 
         public MoviesController()
         {
@@ -28,7 +26,7 @@ namespace Vidly.Controllers.Api
             });
 
             _mapper = config.CreateMapper();
-            _context = new VidlyContext();
+            _context = new ApplicationDbContext();
         }
 
         protected override void Dispose(bool disposing)

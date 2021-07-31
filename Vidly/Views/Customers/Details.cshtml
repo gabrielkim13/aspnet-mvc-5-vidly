@@ -11,9 +11,9 @@
 
 <ul>
     <li>Membership Type: @Model.MembershipType.Name</li>
-    @if (Model.BirthDate != null)
+    @if (Model.BirthDate.HasValue)
     {
-        <li>Birthdate: @Model.BirthDate</li>
+        <li>Birthdate: @Model.BirthDate.Value.ToString("dddd, dd MMMM yyyy")</li>
     }
 </ul>
 
