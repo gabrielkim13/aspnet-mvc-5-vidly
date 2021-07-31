@@ -36,12 +36,14 @@ namespace Vidly.Controllers.Api
             base.Dispose(disposing);
         }
 
-        public IEnumerable<MovieDto> GetMovies()
+        public IEnumerable<MovieDto> GetMovies(string query = "")
         {
-            return _context.Movies
-                .Include(m => m.Genre)
-                .ToList()
-                .Select(_mapper.Map<Movie, MovieDto>);
+            var movies = _context.Movies.Include(m => m.Genre);
+
+            if (!string.IsNullOrWhiteSpace(query))
+                movies = movies.Where(m => m.Name.Contains(query) && m.NumberAvailable > 0);
+
+            return movies.ToList().Select(_mapper.Map<Movie, MovieDto>);
         }
 
         public IHttpActionResult GetMovie(int id)
@@ -63,6 +65,9 @@ namespace Vidly.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
+            if (movieDto.NumberAvailable > movieDto.NumberInStock)
+                return BadRequest("Number Available can't be larger than Number In Stock.");
+
             movieDto.DateAdded = DateTime.Now;
 
             var movie = _mapper.Map<MovieDto, Movie>(movieDto);
@@ -77,31 +82,38 @@ namespace Vidly.Controllers.Api
 
         [HttpPut]
         [Authorize(Roles = RoleName.CanManageMovies)]
-        public void UpdateMovie(int id, MovieDto movieDto)
+        public IHttpActionResult UpdateMovie(int id, MovieDto movieDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
             var updateMovie = _context.Movies.SingleOrDefault(c => c.Id == id);
 
             if (updateMovie == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
+
+            if (movieDto.NumberAvailable > movieDto.NumberInStock)
+                return BadRequest("Number Available can't be larger than Number In Stock.");
 
             _mapper.Map(movieDto, updateMovie);
             _context.SaveChanges();
+
+            return Ok();
         }
 
         [HttpDelete]
         [Authorize(Roles = RoleName.CanManageMovies)]
-        public void DeleteMovie(int id)
+        public IHttpActionResult DeleteMovie(int id)
         {
             var deleteMovie = _context.Movies.SingleOrDefault(c => c.Id == id);
 
             if (deleteMovie == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
 
             _context.Movies.Remove(deleteMovie);
             _context.SaveChanges();
+
+            return Ok();
         }
     }
 }

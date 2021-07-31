@@ -3,7 +3,8 @@
 @model MovieFormViewModel
 
 @{
-    var title = Model.Movie?.Id > 0 ? "Edit Movie" : "New Movie";
+    var isEdit = Model.Movie?.Id > 0;
+    var title = isEdit ? "Edit Movie" : "New Movie";
 
     ViewBag.Title = title;
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,9 +41,22 @@
 
     <div class="form-group">
         @Html.LabelFor(m => m.Movie.NumberInStock)
-        @Html.TextBoxFor(m => m.Movie.NumberInStock, new { type = "number", min = "0", @class = "form-control" })
+        @Html.TextBoxFor(m => m.Movie.NumberInStock, new { type = "number", min = "1", max = "20", @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Movie.NumberInStock)
     </div>
+
+    if (isEdit)
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Movie.NumberAvailable)
+            @Html.TextBoxFor(m => m.Movie.NumberAvailable, new { type = "number", min = "0", max = "20", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Movie.NumberAvailable)
+        </div>
+    }
+    else
+    {
+        @Html.HiddenFor(m => m.Movie.NumberAvailable)
+    }
 
     @Html.HiddenFor(m => m.Movie.Id)
     @Html.AntiForgeryToken()

@@ -36,12 +36,14 @@ namespace Vidly.Controllers.Api
             base.Dispose(disposing);
         }
 
-        public IEnumerable<CustomerDto> GetCustomers()
+        public IEnumerable<CustomerDto> GetCustomers(string query = "")
         {
-            return _context.Customers
-                .Include(c => c.MembershipType)
-                .ToList()
-                .Select(_mapper.Map<Customer, CustomerDto>);
+            var customers = _context.Customers.Include(c => c.MembershipType);
+
+            if (!string.IsNullOrWhiteSpace(query))
+                customers = customers.Where(c => c.Name.Contains(query));
+
+            return customers.ToList().Select(_mapper.Map<Customer, CustomerDto>);
         }
 
         public IHttpActionResult GetCustomer(int id)

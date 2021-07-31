@@ -78,6 +78,9 @@ namespace Vidly.Controllers
         [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Save(Movie movie)
         {
+            if (movie.NumberAvailable > movie.NumberInStock)
+                throw new Exception("Number Available can't be larger than Number In Stock.");
+
             if (movie.Id > 0)
             {
                 var updateMovie = _context.Movies.Single(c => c.Id == movie.Id);
@@ -86,9 +89,11 @@ namespace Vidly.Controllers
                 updateMovie.ReleaseDate = movie.ReleaseDate;
                 updateMovie.Genre = movie.Genre;
                 updateMovie.NumberInStock = movie.NumberInStock;
+                updateMovie.NumberAvailable = movie.NumberAvailable;
             }
             else
             {
+                movie.NumberAvailable = movie.NumberInStock;
                 movie.DateAdded = DateTime.Now;
 
                 _context.Movies.Add(movie);
@@ -101,7 +106,7 @@ namespace Vidly.Controllers
 
         private IEnumerable<Genre> GetGenres()
         {
-            if (MemoryCache.Default["Genres"] != null)
+            if (MemoryCache.Default["Genres"] == null)
             {
                 MemoryCache.Default["Genres"] = _context.Genres.ToList();
             }
