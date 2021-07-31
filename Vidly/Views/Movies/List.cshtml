@@ -30,7 +30,7 @@
                     dataSrc: '',
                 },
                 columns: [
-                    { data: 'name', render: (data, type, row) => `<a href="/movies/edit/${row.Id}">${data}</a>` },
+                    { data: 'name', render: (data, type, row) => `<a href="/movies/edit/${row.id}">${data}</a>` },
                     { data: 'genre.name' },
                     { data: 'id', render: (data, type, row) => `<button data-movie-id="${data}" class="btn-link js-delete">Delete</button>` },
                 ],

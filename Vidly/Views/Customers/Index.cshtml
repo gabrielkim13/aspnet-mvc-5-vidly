@@ -30,7 +30,7 @@
                     dataSrc: '',
                 },
                 columns: [
-                    { data: 'name', render: (data, type, row) => `<a href="/customers/edit/${row.Id}">${data}</a>` },
+                    { data: 'name', render: (data, type, row) => `<a href="/customers/edit/${row.id}">${data}</a>` },
                     { data: 'membershipType.name' },
                     { data: 'id', render: (data, type, row) => `<button data-customer-id="${data}" class="btn-link js-delete">Delete</button>` },
                 ],

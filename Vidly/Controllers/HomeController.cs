@@ -7,6 +7,7 @@ using System.Web.Mvc;
 namespace Vidly.Controllers
 {
     [AllowAnonymous]
+    [OutputCache(Duration = 60)]
     public class HomeController : Controller
     {
         public ActionResult Index()

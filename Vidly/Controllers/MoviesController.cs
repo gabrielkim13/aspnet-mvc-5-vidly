@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.Mvc;
 
@@ -49,7 +50,7 @@ namespace Vidly.Controllers
             var movieFormViewModel = new MovieFormViewModel()
             {
                 Movie = new Movie(),
-                Genres = _context.Genres.ToList(),
+                Genres = GetGenres(),
             };
 
             return View("MovieForm", movieFormViewModel);
@@ -66,7 +67,7 @@ namespace Vidly.Controllers
             var movieFormViewModel = new MovieFormViewModel()
             {
                 Movie = movie,
-                Genres = _context.Genres.ToList(),
+                Genres = GetGenres(),
             };
 
             return View("MovieForm", movieFormViewModel);
@@ -96,6 +97,18 @@ namespace Vidly.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        private IEnumerable<Genre> GetGenres()
+        {
+            if (MemoryCache.Default["Genres"] != null)
+            {
+                MemoryCache.Default["Genres"] = _context.Genres.ToList();
+            }
+
+            var genres = (IEnumerable<Genre>)MemoryCache.Default["Genres"];
+
+            return genres;
         }
     }
 }
